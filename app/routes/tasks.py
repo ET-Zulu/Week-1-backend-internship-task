@@ -80,6 +80,25 @@ async def update_existing_task(task_id: int, task: TaskUpdate):
     
     return updated
 
+@router.patch("/{task_id}/complete", response_model=Task)
+async def mark_task_complete(task_id: int):
+    """
+    Mark a task as completed
+    This is a shortcut for updating just the completed field
+    """
+    # Check if task exists
+    existing = get_task_by_id(task_id)
+    if not existing:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task with id {task_id} not found"
+        )
+    
+    # Update only the completed field to True
+    updated = update_task(task_id, {"completed": True})
+    
+    return updated
+
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_existing_task(task_id: int):
     """
