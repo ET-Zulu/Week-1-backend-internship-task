@@ -1,6 +1,5 @@
 # Import FastAPI - this is our main tool for building the API
 from fastapi import FastAPI
-
 # Create the FastAPI application
 # This is like creating a new server instance
 app = FastAPI(
