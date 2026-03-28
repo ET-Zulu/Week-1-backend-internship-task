@@ -1,5 +1,6 @@
 # Import FastAPI - this is our main tool for building the API
 from fastapi import FastAPI
+from app.routes import tasks
 # Create the FastAPI application
 # This is like creating a new server instance
 app = FastAPI(
@@ -9,7 +10,11 @@ app = FastAPI(
 )
 
 # This is a "route" - it handles requests to the root URL "/"
+
+app.include_router(tasks.router)
+
 # @app.get means this handles GET requests
+
 @app.get("/")
 async def root():
     """
