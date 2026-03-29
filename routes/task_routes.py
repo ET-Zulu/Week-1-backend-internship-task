@@ -28,3 +28,15 @@ async def create_task(task: Task):
     task.created_at = datetime.now()
     tasks[new_id] = task
     return task
+
+
+# update task
+@router.put("/{id}")
+async def update_task(id: int, task: Task):
+    if id not in tasks:
+        raise HTTPException(status_code=404, detail="Task not found")
+    task.id = id
+    task.created_at = tasks[id].created_at
+
+    tasks[id] = task
+    return tasks[id]
