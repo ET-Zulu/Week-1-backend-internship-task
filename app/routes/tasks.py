@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException, status
 from typing import List, Dict, Any
 from datetime import datetime, timezone
 
-# Relative imports based on your app structure
 from ..models import Task, TaskCreate
 from ..storage import read_tasks, write_tasks, get_next_id
 
@@ -25,7 +24,6 @@ async def create_task(task_in: TaskCreate) -> Task:
         created_at=datetime.now(timezone.utc),
     )
 
-    # Use model_dump(mode="json") so datetime becomes a string for JSON
     tasks.append(new_task.model_dump(mode="json"))
     await write_tasks(tasks)
     return new_task

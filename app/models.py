@@ -14,6 +14,6 @@ class Task(BaseModel):
     title: str
     description: str
     completed: bool = False
-    created_at: datetime  # Fixed typo to match tasks.py logic
+    created_at: datetime
 
     model_config = ConfigDict(extra="forbid")
