@@ -29,7 +29,7 @@ async def create_task(task: Task, storage: dict = Depends(get_storage)):
     storage[new_id] = new_task
     return {
         "message": "Task created successfully",
-        "status_code": 200,
+        "status_code": 201,
         "task": new_task,
     }
 
