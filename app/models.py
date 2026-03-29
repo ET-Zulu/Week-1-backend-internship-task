@@ -18,5 +18,7 @@ class Task(TaskBase):
     
     id: int
     completed: bool = False
-    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+)
     model_config = ConfigDict(from_attributes=True)
