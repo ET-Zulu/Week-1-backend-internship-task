@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from datetime import datetime
-from typing import List
+from typing import List, Optional
+from fastapi import Query
 
 from app.models import Task, TaskCreate
 from app.storage import tasks, task_id_counter
@@ -27,8 +28,34 @@ async def create_task(task_data: TaskCreate) -> Task:
 
 
 @router.get("/tasks", response_model=List[Task])
-async def get_tasks() -> List[Task]:
-    return list(tasks.values())
+async def get_tasks(
+    completed: Optional[bool] = None,
+    search: Optional[str] = None,
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1)
+) -> List[Task]:
+
+    # Start with all tasks
+    result = list(tasks.values())
+
+    # 🔍 Filtering
+    if completed is not None:
+        result = [task for task in result if task.completed == completed]
+
+    # 🔎 Search (title + description)
+    if search:
+        search_lower = search.lower()
+        result = [
+            task for task in result
+            if search_lower in task.title.lower()
+            or search_lower in task.description.lower()
+        ]
+
+    # 📄 Pagination
+    start = (page - 1) * limit
+    end = start + limit
+
+    return result[start:end]
 
 
 @router.get("/tasks/{task_id}", response_model=Task)
